@@ -10,3 +10,9 @@
 
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
+
+# Environment file with sensitive data
+.env
+
+# Database file
+*.db
