@@ -21,8 +21,7 @@ func (s MessageState) Send(content string) {
 
 // Reply send a message to the channel and mention the user of the initial message.
 func (s MessageState) Reply(content string) {
-	ch, err := s.Client.GetChannel(s.Event.Message.ChannelID)
-	if err != nil || ch.Type == disgord.ChannelTypeDM {
+	if s.IsDMChannel() {
 		s.Send(content)
 	} else {
 		s.Session.SendMsg(s.Event.Message.ChannelID, &disgord.Message{
@@ -57,15 +56,15 @@ func (s MessageState) HasPrefix() bool {
 	return strings.HasPrefix(s.Event.Message.Content, config.CommandPrefix)
 }
 
-// PrefixRequired whether a prefix is required or not.
-func (s MessageState) PrefixRequired() (bool, error) {
+// IsDMChannel whether the message's channel is a DM channel.
+func (s MessageState) IsDMChannel() bool {
 	ch, err := s.Client.GetChannel(s.Event.Message.ChannelID)
 	if err != nil {
-		// Prefix is always required on error.
-		return true, err
+		// It's not worth evaluating the error.
+		return false
 	}
 
-	return ch.Type != disgord.ChannelTypeDM, nil
+	return ch.Type == disgord.ChannelTypeDM
 }
 
 // Message message content.

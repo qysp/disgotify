@@ -15,8 +15,8 @@ func ListenMessages() {
 			Event:   evt,
 		}
 
-		// Prefix in a direct message is not needed.
-		if required, _ := s.PrefixRequired(); required && !s.HasPrefix() {
+		// Prefix is always needed, except in a direct message.
+		if !s.IsDMChannel() && !s.HasPrefix() {
 			return
 		}
 
