@@ -25,7 +25,7 @@ func (s MessageState) Reply(content string) {
 	if err != nil || ch.Type == disgord.ChannelTypeDM {
 		s.Send(content)
 	} else {
-		s.Event.Message.Author.SendMsg(s.Session, &disgord.Message{
+		s.Session.SendMsg(s.Event.Message.ChannelID, &disgord.Message{
 			Content: s.Event.Message.Author.Mention() + " " + content,
 		})
 	}
