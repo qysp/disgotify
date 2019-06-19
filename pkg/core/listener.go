@@ -2,14 +2,15 @@ package core
 
 import (
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/commands"
-	"github.com/qysp/disgotify/utils"
+	"github.com/qysp/disgotify/pkg/commandindex"
+	"github.com/qysp/disgotify/pkg/commands"
+	"github.com/qysp/disgotify/pkg/states"
 )
 
 // ListenMessages listen for Discord messages.
 func ListenMessages() {
 	Client.On(disgord.EvtMessageCreate, func(session disgord.Session, evt *disgord.MessageCreate) {
-		s := utils.MessageState{
+		s := states.MessageState{
 			Session: session,
 			Event:   evt,
 		}
@@ -32,8 +33,8 @@ func ListenMessages() {
 	})
 }
 
-func getCommand(s utils.MessageState) commands.Command {
-	for _, cmd := range commands.Index {
+func getCommand(s states.MessageState) commands.Command {
+	for _, cmd := range commandindex.Index {
 		if !cmd.Active() {
 			continue
 		}

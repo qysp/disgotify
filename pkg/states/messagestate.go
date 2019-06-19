@@ -1,10 +1,11 @@
-package utils
+package states
 
 import (
 	"strings"
 
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/config"
+	"github.com/qysp/disgotify/pkg/common/config"
+	"github.com/qysp/disgotify/pkg/common/permissions"
 )
 
 // MessageState Disgord's MessageCreate event wrapper.
@@ -85,12 +86,12 @@ func (s MessageState) UserID() disgord.Snowflake {
 }
 
 // UserPermission user's permission level
-func (s MessageState) UserPermission() PermissionLevel {
+func (s MessageState) UserPermission() permissions.PermissionLevel {
 	if s.UserID() == config.DeveloperID {
-		return PermissionDeveloper
+		return permissions.PermissionDeveloper
 	}
 
-	return PermissionDefault
+	return permissions.PermissionDefault
 }
 
 // MatchCommand whether the command name matches the requested command.

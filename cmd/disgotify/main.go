@@ -2,9 +2,10 @@ package main
 
 import (
 	_ "github.com/joho/godotenv/autoload"
-	"github.com/qysp/disgotify/config"
-	"github.com/qysp/disgotify/core"
-	"github.com/qysp/disgotify/database"
+
+	"github.com/qysp/disgotify/pkg/common/config"
+	"github.com/qysp/disgotify/pkg/core"
+	"github.com/qysp/disgotify/pkg/database"
 )
 
 func main() {

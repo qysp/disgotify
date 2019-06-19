@@ -2,6 +2,7 @@ package database
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/qysp/disgotify/pkg/database/models"
 	// To create a SQLite3 database with GORM
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
@@ -17,7 +18,7 @@ func Connect() error {
 		panic(err)
 	}
 
-	DB.AutoMigrate(&Reminder{})
+	DB.AutoMigrate(&models.Reminder{})
 
 	return nil
 }

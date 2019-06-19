@@ -2,7 +2,7 @@ package core
 
 import (
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/config"
+	"github.com/qysp/disgotify/pkg/common/config"
 )
 
 // Client Disgord client.

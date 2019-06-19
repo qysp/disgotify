@@ -1,4 +1,4 @@
-package utils
+package permissions
 
 // PermissionLevel permission level indicator.
 type PermissionLevel uint

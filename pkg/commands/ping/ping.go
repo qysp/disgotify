@@ -2,8 +2,9 @@ package ping
 
 import (
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/config"
-	"github.com/qysp/disgotify/utils"
+	"github.com/qysp/disgotify/pkg/common/config"
+	"github.com/qysp/disgotify/pkg/common/permissions"
+	"github.com/qysp/disgotify/pkg/states"
 )
 
 // Ping Ping-Pong command.
@@ -26,19 +27,19 @@ func (Ping) Description() string {
 	return "Test command. Send a ping, receive a pong."
 }
 
-func (Ping) Permission() utils.PermissionLevel {
-	return utils.PermissionDefault
+func (Ping) Permission() permissions.PermissionLevel {
+	return permissions.PermissionDefault
 }
 
 func (Ping) Active() bool {
 	return true
 }
 
-func (Ping) Execute(s utils.MessageState) {
+func (Ping) Execute(s states.MessageState) {
 	s.Send("pong")
 }
 
-func (p Ping) Help(s utils.MessageState) {
+func (p Ping) Help(s states.MessageState) {
 	// Unnecessary but I'll leave it as a template for upcomming commands.
 	embed := &disgord.Embed{
 		Title:       "Command \"" + p.Name() + "\" usage",
