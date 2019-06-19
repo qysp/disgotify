@@ -14,51 +14,29 @@ type MessageState struct {
 }
 
 // Send send a message to the channel.
-func (s MessageState) Send(content string) {
-	s.Session.SendMsg(s.Event.Message.ChannelID, content)
+func (s MessageState) Send(data ...interface{}) (*disgord.Message, error) {
+	return s.Session.SendMsg(s.Event.Message.ChannelID, data...)
 }
 
-// Reply send a message to the channel and mention the user of the initial message.
-func (s MessageState) Reply(content string) {
+// Reply send a message to the channel and mention the user.
+func (s MessageState) Reply(content string) (*disgord.Message, error) {
 	// Don't mention the user in a DM.
-	if s.IsDMChannel() {
-		s.Send(content)
-	} else {
-		s.Session.SendMsg(s.Event.Message.ChannelID, &disgord.Message{
-			Content: s.Event.Message.Author.Mention() + " " + content,
-		})
+	if !s.IsDMChannel() {
+		content = s.Event.Message.Author.Mention() + " " + content
 	}
+
+	return s.Send(content)
 }
 
-// DM send a direct message to the user of the initial message.
-func (s MessageState) DM(content string) {
+// DM send a direct message to the user.
+func (s MessageState) DM(data ...interface{}) (*disgord.Message, error) {
 	ch, err := s.Session.CreateDM(s.Event.Message.Author.ID)
 	if err != nil {
 		s.Session.Logger().Error(err)
-		return
+		return nil, err
 	}
 
-	s.Session.SendMsg(ch.ID, content)
-}
-
-// SendEmbed send embedded rich content to the channel.
-func (s MessageState) SendEmbed(embed *disgord.Embed) {
-	s.Session.SendMsg(s.Event.Message.ChannelID, &disgord.CreateMessageParams{
-		Embed: embed,
-	})
-}
-
-// DMEmbed send embedded rich content as a direct message to the user of the initial message.
-func (s MessageState) DMEmbed(embed *disgord.Embed) {
-	ch, err := s.Session.CreateDM(s.Event.Message.Author.ID)
-	if err != nil {
-		s.Session.Logger().Error(err)
-		return
-	}
-
-	s.Session.SendMsg(ch.ID, &disgord.CreateMessageParams{
-		Embed: embed,
-	})
+	return s.Session.SendMsg(ch.ID, data...)
 }
 
 // HasPrefix whether the message content starts with the prefix.
