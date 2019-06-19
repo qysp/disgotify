@@ -45,5 +45,5 @@ func (p Ping) Help(s utils.MessageState) {
 		Description: config.CommandPrefix + p.Name(),
 		Color:       0xe5004c,
 	}
-	s.Send(&disgord.CreateMessageParams{Embed: embed})
+	s.SendEmbed(embed)
 }

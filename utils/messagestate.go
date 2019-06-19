@@ -39,6 +39,20 @@ func (s MessageState) DM(data ...interface{}) (*disgord.Message, error) {
 	return s.Session.SendMsg(ch.ID, data...)
 }
 
+// SendEmbed send rich embedded content to the channel.
+func (s MessageState) SendEmbed(embed *disgord.Embed) (*disgord.Message, error) {
+	return s.Send(&disgord.CreateMessageParams{
+		Embed: embed,
+	})
+}
+
+// DMEmbed send rich embedded content as a direct message to the user.
+func (s MessageState) DMEmbed(embed *disgord.Embed) (*disgord.Message, error) {
+	return s.DM(&disgord.CreateMessageParams{
+		Embed: embed,
+	})
+}
+
 // HasPrefix whether the message content starts with the prefix.
 func (s MessageState) HasPrefix() bool {
 	return strings.HasPrefix(s.Event.Message.Content, config.CommandPrefix)
