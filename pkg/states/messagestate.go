@@ -98,3 +98,7 @@ func (s MessageState) UserPermission() permissions.PermissionLevel {
 func (s MessageState) UserCommand() string {
 	return strings.Replace(s.MessageParts()[0], config.CommandPrefix, "", 1)
 }
+
+func (s MessageState) IsBot() bool {
+	return s.Event.Message.Author.Bot
+}

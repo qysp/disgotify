@@ -14,7 +14,7 @@ func ListenMessages() {
 		}
 
 		// Prefix is always needed, except in a direct message.
-		if !s.IsDMChannel() && !s.HasPrefix() {
+		if !s.IsDMChannel() && !s.HasPrefix() || s.IsBot() {
 			return
 		}
 
