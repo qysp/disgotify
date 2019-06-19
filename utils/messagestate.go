@@ -7,9 +7,8 @@ import (
 	"github.com/qysp/disgotify/config"
 )
 
-// MessageState Disgord's MessageState event wrapper.
+// MessageState Disgord's MessageCreate event wrapper.
 type MessageState struct {
-	Client  *disgord.Client
 	Session disgord.Session
 	Event   *disgord.MessageCreate
 }
@@ -21,6 +20,7 @@ func (s MessageState) Send(content string) {
 
 // Reply send a message to the channel and mention the user of the initial message.
 func (s MessageState) Reply(content string) {
+	// Don't mention the user in a DM.
 	if s.IsDMChannel() {
 		s.Send(content)
 	} else {
@@ -32,9 +32,13 @@ func (s MessageState) Reply(content string) {
 
 // DM send a direct message to the user of the initial message.
 func (s MessageState) DM(content string) {
-	s.Event.Message.Author.SendMsg(s.Session, &disgord.Message{
-		Content: content,
-	})
+	ch, err := s.Session.CreateDM(s.Event.Message.Author.ID)
+	if err != nil {
+		s.Session.Logger().Error(err)
+		return
+	}
+
+	s.Session.SendMsg(ch.ID, content)
 }
 
 // SendEmbed send embedded rich content to the channel.
@@ -46,8 +50,14 @@ func (s MessageState) SendEmbed(embed *disgord.Embed) {
 
 // DMEmbed send embedded rich content as a direct message to the user of the initial message.
 func (s MessageState) DMEmbed(embed *disgord.Embed) {
-	s.Event.Message.Author.SendMsg(s.Session, &disgord.Message{
-		Embeds: []*disgord.Embed{embed},
+	ch, err := s.Session.CreateDM(s.Event.Message.Author.ID)
+	if err != nil {
+		s.Session.Logger().Error(err)
+		return
+	}
+
+	s.Session.SendMsg(ch.ID, &disgord.CreateMessageParams{
+		Embed: embed,
 	})
 }
 
@@ -58,9 +68,9 @@ func (s MessageState) HasPrefix() bool {
 
 // IsDMChannel whether the message's channel is a DM channel.
 func (s MessageState) IsDMChannel() bool {
-	ch, err := s.Client.GetChannel(s.Event.Message.ChannelID)
+	ch, err := s.Session.GetChannel(s.Event.Message.ChannelID)
 	if err != nil {
-		// It's not worth evaluating the error.
+		s.Session.Logger().Error(err)
 		return false
 	}
 

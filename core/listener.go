@@ -10,7 +10,6 @@ import (
 func ListenMessages() {
 	Client.On(disgord.EvtMessageCreate, func(session disgord.Session, evt *disgord.MessageCreate) {
 		s := utils.MessageState{
-			Client:  Client,
 			Session: session,
 			Event:   evt,
 		}
