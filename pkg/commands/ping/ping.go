@@ -10,36 +10,35 @@ import (
 // Ping Ping-Pong command.
 type Ping struct{}
 
-// New create a Ping struct.
-func New() Ping {
-	return Ping{}
+func Init() *Ping {
+	return &Ping{}
 }
 
-func (Ping) Name() string {
+func (*Ping) Name() string {
 	return "ping"
 }
 
-func (Ping) Aliases() []string {
+func (*Ping) Aliases() []string {
 	return []string{}
 }
 
-func (Ping) Description() string {
+func (*Ping) Description() string {
 	return "Test command. Send a ping, receive a pong."
 }
 
-func (Ping) Permission() permissions.PermissionLevel {
+func (*Ping) Permission() permissions.PermissionLevel {
 	return permissions.PermissionDefault
 }
 
-func (Ping) Active() bool {
+func (*Ping) Active() bool {
 	return true
 }
 
-func (Ping) Execute(s states.MessageState) {
+func (*Ping) Execute(s states.MessageState) {
 	s.Send("pong")
 }
 
-func (p Ping) Help(s states.MessageState) {
+func (p *Ping) Help(s states.MessageState) {
 	// Unnecessary but I'll leave it as a template for upcomming commands.
 	embed := &disgord.Embed{
 		Title:       "Command \"" + p.Name() + "\" usage",

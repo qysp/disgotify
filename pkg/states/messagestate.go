@@ -94,8 +94,7 @@ func (s MessageState) UserPermission() permissions.PermissionLevel {
 	return permissions.PermissionDefault
 }
 
-// MatchCommand whether the command name matches the requested command.
-func (s MessageState) MatchCommand(cmd string) bool {
-	userCmd := strings.Replace(s.MessageParts()[0], config.CommandPrefix, "", 1)
-	return cmd == userCmd
+// UserCommand command used by user.
+func (s MessageState) UserCommand() string {
+	return strings.Replace(s.MessageParts()[0], config.CommandPrefix, "", 1)
 }

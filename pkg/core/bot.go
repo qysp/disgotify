@@ -2,11 +2,17 @@ package core
 
 import (
 	"github.com/andersfylling/disgord"
+	"github.com/qysp/disgotify/pkg/commandindex"
 	"github.com/qysp/disgotify/pkg/common/config"
 )
 
-// Client Disgord client.
-var Client *disgord.Client
+var (
+	// Client Disgord client.
+	Client *disgord.Client
+
+	// Index bot command index.
+	Index *commandindex.CommandIndex
+)
 
 // Start create a new Disgord client and connect it.
 func Start() {
@@ -21,6 +27,8 @@ func Start() {
 	}
 
 	defer Client.DisconnectOnInterrupt()
+
+	Index = commandindex.Init()
 
 	go ListenMessages()
 }

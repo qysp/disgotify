@@ -2,8 +2,6 @@ package core
 
 import (
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/pkg/commandindex"
-	"github.com/qysp/disgotify/pkg/commands"
 	"github.com/qysp/disgotify/pkg/states"
 )
 
@@ -20,7 +18,8 @@ func ListenMessages() {
 			return
 		}
 
-		command := getCommand(s)
+		command := Index.Get(s.UserCommand())
+
 		if command == nil {
 			return
 		}
@@ -31,21 +30,4 @@ func ListenMessages() {
 
 		command.Execute(s)
 	})
-}
-
-func getCommand(s states.MessageState) commands.Command {
-	for _, cmd := range commandindex.Index {
-		if !cmd.Active() {
-			continue
-		}
-		if s.MatchCommand(cmd.Name()) {
-			return cmd
-		}
-		for _, alias := range cmd.Aliases() {
-			if s.MatchCommand(alias) {
-				return cmd
-			}
-		}
-	}
-	return nil
 }
