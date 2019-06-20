@@ -1,4 +1,4 @@
-package permissions
+package common
 
 // PermissionLevel permission level indicator.
 type PermissionLevel uint

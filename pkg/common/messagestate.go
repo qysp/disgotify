@@ -1,11 +1,9 @@
-package states
+package common
 
 import (
 	"strings"
 
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/pkg/common/config"
-	"github.com/qysp/disgotify/pkg/common/permissions"
 )
 
 // MessageState Disgord's MessageCreate event wrapper.
@@ -56,7 +54,7 @@ func (s MessageState) DMEmbed(embed *disgord.Embed) (*disgord.Message, error) {
 
 // HasPrefix whether the message content starts with the prefix.
 func (s MessageState) HasPrefix() bool {
-	return strings.HasPrefix(s.Event.Message.Content, config.CommandPrefix)
+	return strings.HasPrefix(s.Event.Message.Content, CommandPrefix)
 }
 
 // IsDMChannel whether the message's channel is a DM channel.
@@ -86,19 +84,25 @@ func (s MessageState) UserID() disgord.Snowflake {
 }
 
 // UserPermission user's permission level
-func (s MessageState) UserPermission() permissions.PermissionLevel {
-	if s.UserID() == config.DeveloperID {
-		return permissions.PermissionDeveloper
+func (s MessageState) UserPermission() PermissionLevel {
+	if s.UserID() == DeveloperID {
+		return PermissionDeveloper
 	}
 
-	return permissions.PermissionDefault
+	return PermissionDefault
 }
 
 // UserCommand command used by user.
 func (s MessageState) UserCommand() string {
-	return strings.Replace(s.MessageParts()[0], config.CommandPrefix, "", 1)
+	return strings.Replace(s.MessageParts()[0], CommandPrefix, "", 1)
 }
 
+// UserCommandArgs arguments for the command used by user.
+func (s MessageState) UserCommandArgs() []string {
+	return s.MessageParts()[1:]
+}
+
+// IsBot whether the user is a bot.
 func (s MessageState) IsBot() bool {
 	return s.Event.Message.Author.Bot
 }

@@ -1,4 +1,4 @@
-package config
+package common
 
 import (
 	"os"
@@ -22,7 +22,7 @@ func LoadEnv() {
 	}
 
 	DiscordToken = os.Getenv("DISCORD_TOKEN")
-	id, err := strconv.ParseUint(os.Getenv("DEVELOPER_ID"), 0, 64)
+	id, err := strconv.ParseUint(os.Getenv("DEVELOPER_ID"), 10, 64)
 	if err != nil {
 		id = 0
 	}

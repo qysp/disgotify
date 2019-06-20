@@ -3,7 +3,7 @@ package core
 import (
 	"github.com/andersfylling/disgord"
 	"github.com/qysp/disgotify/pkg/commandindex"
-	"github.com/qysp/disgotify/pkg/common/config"
+	"github.com/qysp/disgotify/pkg/common"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 // Start create a new Disgord client and connect it.
 func Start() {
 	Client = disgord.New(&disgord.Config{
-		BotToken: config.DiscordToken,
+		BotToken: common.DiscordToken,
 		Logger:   disgord.DefaultLogger(false),
 	})
 
