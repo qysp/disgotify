@@ -16,4 +16,7 @@ func main() {
 
 	// Start the Discord bot.
 	core.Start()
+
+	// Disconnect client and close database on interrupt.
+	core.StopOnInterrupt()
 }

@@ -2,7 +2,7 @@ package core
 
 import (
 	"github.com/andersfylling/disgord"
-	"github.com/qysp/disgotify/pkg/commandindex"
+	"github.com/qysp/disgotify/pkg/commands"
 	"github.com/qysp/disgotify/pkg/common"
 )
 
@@ -11,7 +11,7 @@ var (
 	Client *disgord.Client
 
 	// Index bot command index.
-	Index *commandindex.CommandIndex
+	Index *commands.CommandIndex
 )
 
 // Start create a new Disgord client and connect it.
@@ -26,17 +26,14 @@ func Start() {
 		panic(err)
 	}
 
-	defer Client.DisconnectOnInterrupt()
-
-	Index = commandindex.Init()
+	Index = commands.Init()
 
 	go ListenMessages()
 }
 
-// Stop disconnect the Disgord client.
-func Stop() {
-	err := Client.Disconnect()
-	if err != nil {
-		panic(err)
-	}
+// StopOnInterrupt disconnect the Disgord client.
+func StopOnInterrupt() {
+	defer common.DB.Close()
+
+	Client.DisconnectOnInterrupt()
 }
