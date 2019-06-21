@@ -1,8 +1,10 @@
 package commands
 
 import (
+	"github.com/qysp/disgotify/pkg/commands/list"
 	"github.com/qysp/disgotify/pkg/commands/ping"
 	"github.com/qysp/disgotify/pkg/commands/remind"
+	"github.com/qysp/disgotify/pkg/commands/remove"
 )
 
 // CommandIndex represents the index for bot commands.
@@ -16,6 +18,8 @@ func Init() *CommandIndex {
 	index.register(
 		ping.Init(),
 		remind.Init(),
+		list.Init(),
+		remove.Init(),
 	)
 
 	return index
