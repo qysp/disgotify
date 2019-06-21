@@ -20,7 +20,7 @@ const (
 type Reminder struct {
 	gorm.Model
 	UserID       disgord.Snowflake
-	When         int64
+	Due          int64
 	Notification string
 	Repeat       RepeatInterval
 }

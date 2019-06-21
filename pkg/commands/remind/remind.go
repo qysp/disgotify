@@ -88,7 +88,8 @@ func (c *Remind) Execute(s common.MessageState) {
 	// Using local timezone.
 	g, _ := goment.New(dateTime, "YYYY-MM-DD HH:mm:ss")
 
-	if now, _ := goment.New(); now.Diff(g) > -1000 {
+	// Only add reminders that lay at least `ReminderInterval` seconds in the future.
+	if now, _ := goment.New(); now.Diff(g) > -int(common.ReminderInterval.Seconds()) {
 		// If the user wants to add a daily reminder, register it for the next day.
 		if interval == models.RepeatDaily {
 			g.Add(1, "day")
@@ -100,7 +101,7 @@ func (c *Remind) Execute(s common.MessageState) {
 
 	err = common.DB.Create(&models.Reminder{
 		UserID:       s.UserID(),
-		When:         g.ToUnix(),
+		Due:          g.ToUnix(),
 		Notification: strings.Join(userCmdArgs, " "),
 		Repeat:       interval,
 	}).Error

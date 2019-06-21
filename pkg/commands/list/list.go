@@ -57,9 +57,9 @@ func (*List) Execute(s common.MessageState) {
 	var fields []*disgord.EmbedField
 	// Use idx as personal reminder ID.
 	for idx, reminder := range reminders {
-		when, _ := goment.Unix(reminder.When)
+		due, _ := goment.Unix(reminder.Due)
 		fields = append(fields, &disgord.EmbedField{
-			Name:  fmt.Sprintf("Reminder #%d on the %s at %s", idx+1, when.Format("Do MMMM YYYY"), when.Format("HH:mm:ss")),
+			Name:  fmt.Sprintf("Reminder #%d on the %s at %s", idx+1, due.Format("Do MMMM YYYY"), due.Format("HH:mm:ss")),
 			Value: reminder.Notification,
 		})
 	}
