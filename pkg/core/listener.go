@@ -1,6 +1,8 @@
 package core
 
 import (
+	"strings"
+
 	"github.com/andersfylling/disgord"
 	"github.com/qysp/disgotify/pkg/common"
 )
@@ -20,7 +22,8 @@ func ListenMessages() {
 
 		// TODO: Dynamic help message. Maybe rework CommandIndex into struct with commands and aliases field?
 
-		command := Index.Get(s.UserCommand())
+		userCmd := strings.ToLower(s.UserCommand())
+		command := Index.Get(userCmd)
 
 		if command == nil {
 			return
