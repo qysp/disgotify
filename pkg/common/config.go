@@ -8,7 +8,7 @@ import (
 	"github.com/andersfylling/disgord"
 )
 
-// Environmentals
+// Environmental variable.
 var (
 	DiscordToken     string
 	DeveloperID      disgord.Snowflake

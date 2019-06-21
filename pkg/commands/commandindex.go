@@ -25,9 +25,12 @@ func Init() *CommandIndex {
 	return index
 }
 
-// register helper function to register bot commands in a clean way.
+// register adds commands to the command index.
 func (ci *CommandIndex) register(commands ...Command) {
 	for _, cmd := range commands {
+		if !cmd.Active() {
+			continue
+		}
 		ci.Set(cmd.Name(), cmd)
 		for _, alias := range cmd.Aliases() {
 			if !ci.Has(alias) {
@@ -37,18 +40,18 @@ func (ci *CommandIndex) register(commands ...Command) {
 	}
 }
 
-// Set register a bot command.
+// Set registers a bot command.
 func (ci *CommandIndex) Set(cmdName string, cmd Command) {
 	(*ci)[cmdName] = cmd
 }
 
-// Has whether the command index has the command registered.
+// Has returns a bool indicating whether the command index already has a registered command with that name.
 func (ci *CommandIndex) Has(cmdName string) bool {
 	_, ok := (*ci)[cmdName]
 	return ok
 }
 
-// Get get the reigstered command by name or alias.
+// Get returns the reigstered command by name or alias.
 func (ci *CommandIndex) Get(cmdName string) Command {
 	return (*ci)[cmdName]
 }

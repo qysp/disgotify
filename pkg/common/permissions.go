@@ -1,6 +1,6 @@
 package common
 
-// PermissionLevel permission level indicator.
+// PermissionLevel represents the permission level for a command.
 type PermissionLevel uint
 
 // Command permission level.

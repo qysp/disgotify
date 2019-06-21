@@ -4,27 +4,26 @@ import (
 	"github.com/qysp/disgotify/pkg/common"
 )
 
-// Command basic command interface.
+// Command represents the base command interface.
 type Command interface {
-	// Name command name.
+	// Name represents a function which should return the name of the command.
 	Name() string
 
-	// Aliases command name aliases.
+	// Aliases represents a function which should return aliases of the command.
 	Aliases() []string
 
-	// Description command (help) description.
+	// Description represents a function which should return a short command description.
 	Description() string
 
-	// Permission command permission level.
+	// Permission represents a function which should return the command's required permission level.
 	Permission() common.PermissionLevel
 
-	// Active whether the command is active.
+	// Active represents a function which should return a bool indicating whether the command is active.
 	Active() bool
 
-	// Execute execute a command's response.
+	// Execute represents a function which should execute the response of a requested command.
 	Execute(common.MessageState)
 
-	// Help command help/usage message.
-	// Can be left empty if not needed (i.e. on simple commands).
+	// Help represents a function which should send a help/usage message of the command to a channel.
 	Help(common.MessageState)
 }

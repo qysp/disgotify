@@ -8,10 +8,10 @@ import (
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// DB disgotify database
+// DB represents the disgotify database
 var DB *gorm.DB
 
-// Init open a connection to the database and auto migrate models.
+// Init opens a connection to the database and auto migrates the models.
 // Panics if there was an error initializing the database connection.
 func Init() error {
 	db, err := gorm.Open("sqlite3", "disgotify.db")

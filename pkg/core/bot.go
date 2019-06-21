@@ -15,7 +15,7 @@ var (
 	Index *commands.CommandIndex
 )
 
-// Start create a new Disgord client and connect it.
+// Start creates a new Disgord client and connects to it.
 func Start() {
 	Client = disgord.New(&disgord.Config{
 		BotToken: common.DiscordToken,

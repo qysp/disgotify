@@ -7,7 +7,7 @@ import (
 	"github.com/qysp/disgotify/pkg/common"
 )
 
-// ListenMessages listen for Discord messages.
+// ListenMessages listens for Discord messages.
 func ListenMessages() {
 	Client.On(disgord.EvtMessageCreate, func(session disgord.Session, evt *disgord.MessageCreate) {
 		s := common.MessageState{
