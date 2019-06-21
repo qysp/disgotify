@@ -35,7 +35,7 @@ func (*Remind) Aliases() []string {
 }
 
 func (*Remind) Description() string {
-	return "Set a reminder for an event and receive a notification via DM."
+	return "Register a reminder for specific date and time and receive a notification."
 }
 
 func (*Remind) Permission() common.PermissionLevel {
@@ -73,46 +73,43 @@ func (c *Remind) Execute(s common.MessageState) {
 
 	gDate, err := parseDate(cmdArgs, hasNext, hasRepeat)
 	if err != nil {
-		s.Reply(fmt.Sprintf("Parse error: %s", err.Error()))
+		s.Reply(fmt.Sprintf("Sorry, %s!", err.Error()))
 		return
 	}
 
 	gTime, err := parseTime(cmdArgs)
 	if err != nil {
-		s.Reply(fmt.Sprintf("Parse error: %s", err.Error()))
+		s.Reply(fmt.Sprintf("Sorry, %s!", err.Error()))
 		return
 	}
 
 	dateTime := gDate.Format("YYYY-MM-DD") + " " + gTime.Format("HH:mm:ss")
 
 	// Using local timezone.
-	g, err := goment.New(dateTime, "YYYY-MM-DD HH:mm:ss")
-	if err != nil {
-		s.Session.Logger().Error(err)
-	}
+	g, _ := goment.New(dateTime, "YYYY-MM-DD HH:mm:ss")
 
 	if now, _ := goment.New(); now.Diff(g) > -1000 {
-		if hasRepeat {
-			switch interval {
-			case models.RepeatMinutely:
-				g.Add(1, "minute")
-			case models.RepeatHourly:
-				g.Add(1, "hour")
-			case models.RepeatDaily:
-				g.Add(1, "day")
-			}
+		// If the user wants to add a daily reminder, register it for the next day.
+		if interval == models.RepeatDaily {
+			g.Add(1, "day")
 		} else {
-			s.Reply("Reminder must be in the future!")
+			s.Reply("Reminder must be (father) in the future.")
 			return
 		}
 	}
 
-	common.DB.Create(&models.Reminder{
+	err = common.DB.Create(&models.Reminder{
 		UserID:       s.UserID(),
 		When:         g.ToUnix(),
-		Notification: strings.Join(cmdArgs[2:], " "),
+		Notification: strings.Join(userCmdArgs, " "),
 		Repeat:       interval,
-	})
+	}).Error
+
+	if err != nil {
+		s.Session.Logger().Error(err)
+		s.Reply(fmt.Sprintf("Unexpected error: %s", err.Error()))
+		return
+	}
 
 	s.Reply(fmt.Sprintf("I will remind you %s", g.FromNow()))
 }
@@ -257,19 +254,19 @@ func parseDate(cmdArgs []string, hasNext bool, hasRepeat bool) (*goment.Goment, 
 	if len(dateParts) == 3 {
 		g, err := goment.New(strings.Join(dateParts, "-"), "DD-MM-YYYY")
 		if err != nil {
-			return nil, errors.New("failed parsing date")
+			return nil, errors.New("cannot parse date")
 		}
 		return g, nil
 	}
 
 	day, err := strconv.ParseInt(dateParts[0], 10, 32)
 	if err != nil {
-		return nil, errors.New("invalid day in date")
+		return nil, errors.New("cannot parse day")
 	}
 
 	month, err := strconv.ParseInt(dateParts[1], 10, 32)
 	if err != nil {
-		return nil, errors.New("invalid month in date")
+		return nil, errors.New("cannot parse month")
 	}
 
 	g, err = goment.New(fmt.Sprintf("%d-%d-%d", day, month, g.Year()), "DD-MM-YYYY")
@@ -302,7 +299,7 @@ func parseTime(cmdArgs []string) (*goment.Goment, error) {
 
 	hour, err := strconv.ParseInt(timeParts[0], 10, 32)
 	if err != nil {
-		return nil, err
+		return nil, errors.New("cannot parse hour")
 	}
 	if hour < 0 || hour > 23 {
 		return nil, errors.New("invalid hour format")
@@ -316,7 +313,7 @@ func parseTime(cmdArgs []string) (*goment.Goment, error) {
 	if len(timeParts) > 1 {
 		minute, err = strconv.ParseInt(timeParts[1], 10, 32)
 		if err != nil {
-			return nil, err
+			return nil, errors.New("cannot parse minute")
 		}
 		if minute < 0 || minute > 60 {
 			return nil, errors.New("invalid minute format")
@@ -328,7 +325,7 @@ func parseTime(cmdArgs []string) (*goment.Goment, error) {
 	if len(timeParts) > 2 {
 		second, err = strconv.ParseInt(timeParts[0], 10, 32)
 		if err != nil {
-			return nil, err
+			return nil, errors.New("cannot parse second")
 		}
 		if second < 0 || second > 60 {
 			return nil, errors.New("invalid second format")
