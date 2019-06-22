@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/andersfylling/disgord"
@@ -55,12 +54,8 @@ func sendHelpMessage(s common.MessageState) {
 	var fields []*disgord.EmbedField
 
 	for _, cmd := range commands.CommandList {
-		var aliases string
-		if len(cmd.Aliases()) > 0 {
-			aliases = fmt.Sprintf("(aliases: %s)", strings.Join(cmd.Aliases(), ", "))
-		}
 		fields = append(fields, &disgord.EmbedField{
-			Name:  cmd.Name() + aliases,
+			Name:  cmd.Name(),
 			Value: cmd.Description(),
 		})
 	}
