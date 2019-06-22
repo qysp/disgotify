@@ -25,7 +25,10 @@ func Init() error {
 
 	DB = db
 
-	cleanReminders()
+	err = cleanReminders()
+	if err != nil {
+		panic(err)
+	}
 
 	return nil
 }
