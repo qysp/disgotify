@@ -1,6 +1,7 @@
 package common
 
 import (
+	"path"
 	"time"
 
 	"github.com/jinzhu/gorm"
@@ -16,7 +17,7 @@ var DB *gorm.DB
 // Init opens a connection to the database and auto migrates the models.
 // Panics if there was an error initializing the database connection.
 func Init() error {
-	db, err := gorm.Open("sqlite3", "disgotify.db")
+	db, err := gorm.Open("sqlite3", path.Join(DatabaseDir, "disgotify.db"))
 	if err != nil {
 		panic(err)
 	}

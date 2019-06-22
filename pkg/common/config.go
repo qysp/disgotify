@@ -10,6 +10,7 @@ import (
 
 // Environmental variable.
 var (
+	DatabaseDir      string
 	DiscordToken     string
 	DeveloperID      disgord.Snowflake
 	CommandPrefix    string
@@ -21,6 +22,9 @@ func LoadEnv() {
 	if _, err := os.Stat(".env"); os.IsNotExist(err) {
 		panic(".env file is missing")
 	}
+
+	// Directory where the database will be saved.
+	DatabaseDir = os.Getenv("DATABASE_DIR")
 
 	// Discord bot token.
 	DiscordToken = os.Getenv("DISCORD_TOKEN")
