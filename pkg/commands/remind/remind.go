@@ -196,14 +196,28 @@ func (c *Remind) Help(s common.MessageState) {
 // Parse the user's date input.
 func parseDate(cmdArgs []string, hasNext bool, hasRepeat bool) (*goment.Goment, error) {
 	weekdays := map[string]int{
-		// long					// short  // min
-		"sunday": 0, "sun": 0, "su": 0,
-		"monday": 1, "mon": 1, "mo": 1,
-		"tuesday": 2, "tue": 2, "tu": 2,
-		"wednesday": 3, "wed": 3, "we": 3,
-		"thursday": 4, "thu": 4, "th": 4,
-		"friday": 5, "fri": 5, "fr": 5,
-		"saturday": 6, "sat": 6, "sa": 6,
+		// Long, short and minimal representation of weekdays.
+		"monday":    1,
+		"mon":       1,
+		"mo":        1,
+		"tuesday":   2,
+		"tue":       2,
+		"tu":        2,
+		"wednesday": 3,
+		"wed":       3,
+		"we":        3,
+		"thursday":  4,
+		"thu":       4,
+		"th":        4,
+		"friday":    5,
+		"fri":       5,
+		"fr":        5,
+		"saturday":  6,
+		"sat":       6,
+		"sa":        6,
+		"sunday":    7,
+		"sun":       7,
+		"su":        7,
 	}
 
 	// Aliases for today/tomorrow.
@@ -224,12 +238,12 @@ func parseDate(cmdArgs []string, hasNext bool, hasRepeat bool) (*goment.Goment, 
 	}
 
 	if weekday, ok := weekdays[date]; ok {
-		currentWeekday := g.Weekday()
+		currentWeekday := g.ISOWeekday()
 		if weekday < currentWeekday || hasNext {
-			// Su  Mo  Tu  We  Th  Fr  Sa
-			// 0   1   2   3   4   5   6
+			// Mo  Tu  We  Th  Fr  Sa Su
+			// 1   2   3   4   5   6	7
 			// 4 -> 3: (3 - 4) + 7 = 6
-			// 4 -> 5: (5 - 4) + 7 = 8
+			// 6 -> 7: (7 - 6) + 7 = 8
 			diff := (weekday - currentWeekday) + 7
 			g.Add(diff, "days")
 		} else {
