@@ -7,8 +7,11 @@ import (
 	"github.com/qysp/disgotify/pkg/commands/remove"
 )
 
-// CommandIndex represents the index for bot commands.
+// CommandIndex represents the index for bot commands mapped with their name and aliases.
 type CommandIndex map[string]Command
+
+// CommandList represents a list of all unique bot command.
+var CommandList []Command
 
 // Init initialize the command index.
 // Commands are registered by name as well as alias.
@@ -31,6 +34,10 @@ func (ci *CommandIndex) register(commands ...Command) {
 		if !cmd.Active() {
 			continue
 		}
+
+		// Make a list of all commands without their aliases.
+		CommandList = append(CommandList, cmd)
+
 		ci.Set(cmd.Name(), cmd)
 		for _, alias := range cmd.Aliases() {
 			if !ci.Has(alias) {
