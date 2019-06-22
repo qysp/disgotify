@@ -57,20 +57,33 @@ func (*List) Execute(s common.MessageState) {
 	var fields []*disgord.EmbedField
 	// Use idx as personal reminder ID.
 	for idx, reminder := range reminders {
+		var repeat string
+		switch reminder.Repeat {
+		case models.RepeatMinutely:
+			repeat = "[Minutely] "
+		case models.RepeatHourly:
+			repeat = "[Hourly] "
+		case models.RepeatDaily:
+			repeat = "[Daily] "
+		}
 		due, _ := goment.Unix(reminder.Due)
 		fields = append(fields, &disgord.EmbedField{
-			Name:  fmt.Sprintf("Reminder #%d on the %s at %s", idx+1, due.Format("Do MMMM YYYY"), due.Format("HH:mm:ss")),
+			Name: fmt.Sprintf(
+				"%sReminder #%d on the %s at %s",
+				repeat,
+				idx+1,
+				due.Format("Do MMMM YYYY"),
+				due.Format("HH:mm:ss"),
+			),
 			Value: reminder.Notification,
 		})
 	}
 
-	embed := &disgord.Embed{
+	s.DMEmbed(&disgord.Embed{
 		Title:  "List of your registered reminders:",
 		Color:  0xe5004c,
 		Fields: fields,
-	}
-
-	s.DMEmbed(embed)
+	})
 }
 
 func (c *List) Help(s common.MessageState) {

@@ -60,12 +60,28 @@ func sendReminders(client *disgord.Client) {
 
 		_, err = client.SendMsg(ch.ID, notification)
 		if err != nil {
-			continue
+			client.Logger().Error(err)
 		}
 
-		err = common.DB.Unscoped().Delete(&reminder).Error
-		if err != nil {
-			client.Logger().Error(err)
+		if reminder.Repeat > models.NoRepeat {
+			g, _ := goment.Unix(reminder.Due)
+			switch reminder.Repeat {
+			case models.RepeatMinutely:
+				g.Add(1, "minute")
+			case models.RepeatHourly:
+				g.Add(1, "hour")
+			case models.RepeatDaily:
+				g.Add(1, "day")
+			}
+
+			common.DB.Model(&reminder).Updates(models.Reminder{
+				Due: g.ToUnix(),
+			})
+		} else {
+			err = common.DB.Unscoped().Delete(&reminder).Error
+			if err != nil {
+				client.Logger().Error(err)
+			}
 		}
 	}
 }

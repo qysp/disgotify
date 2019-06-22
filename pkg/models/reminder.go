@@ -10,7 +10,7 @@ type RepeatInterval uint
 
 // Repeating reminder interval
 const (
-	_ RepeatInterval = iota
+	NoRepeat RepeatInterval = iota
 	RepeatMinutely
 	RepeatHourly
 	RepeatDaily
