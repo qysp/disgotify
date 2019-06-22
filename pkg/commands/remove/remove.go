@@ -96,11 +96,10 @@ func (c *Remove) Help(s common.MessageState) {
 		Value: fmt.Sprintf("%s", cmd),
 	})
 
-	embed := &disgord.Embed{
+	s.SendEmbed(&disgord.Embed{
 		Title:       fmt.Sprintf("Command \"%s\" usage", c.Name()),
 		Description: fmt.Sprintf("%s [reminder index?]", cmd),
 		Color:       0xe5004c,
 		Fields:      fields,
-	}
-	s.SendEmbed(embed)
+	})
 }

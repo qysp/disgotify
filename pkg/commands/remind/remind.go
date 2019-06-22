@@ -112,7 +112,7 @@ func (c *Remind) Execute(s common.MessageState) {
 		return
 	}
 
-	s.Reply(fmt.Sprintf("I will remind you %s", g.FromNow()))
+	s.Reply(fmt.Sprintf("I will remind you %s.", g.FromNow()))
 }
 
 func (c *Remind) Help(s common.MessageState) {
@@ -134,13 +134,13 @@ func (c *Remind) Help(s common.MessageState) {
 	// Aliases for "today".
 	fields = append(fields, &disgord.EmbedField{
 		Name:  "[Date] Aliases: today",
-		Value: "t, td, tday, now",
+		Value: "t, now",
 	})
 
 	// Aliases for "tomorrow".
 	fields = append(fields, &disgord.EmbedField{
 		Name:  "[Date] Aliases: tomorrow",
-		Value: "tr, tmr, tomorow, tomorro",
+		Value: "tmr, tr",
 	})
 
 	// Allowed weekday formats.
@@ -185,13 +185,12 @@ func (c *Remind) Help(s common.MessageState) {
 		Value: fmt.Sprintf("%s 31.12 6pm party @ joes", cmd),
 	})
 
-	embed := &disgord.Embed{
+	s.SendEmbed(&disgord.Embed{
 		Title:       fmt.Sprintf("Command \"%s\" usage", c.Name()),
 		Description: fmt.Sprintf("%s [date] [time] [notification?]", cmd),
 		Color:       0xe5004c,
 		Fields:      fields,
-	}
-	s.SendEmbed(embed)
+	})
 }
 
 // Parse the user's date input.
@@ -208,8 +207,8 @@ func parseDate(cmdArgs []string, hasNext bool, hasRepeat bool) (*goment.Goment, 
 	}
 
 	// Aliases for today/tomorrow.
-	todayAliases := []string{"today", "t", "td", "tday", "now"}
-	tomorrowAliases := []string{"tomorrow", "tmr", "tr", "tomorow", "tomorro"}
+	todayAliases := []string{"today", "t", "now"}
+	tomorrowAliases := []string{"tomorrow", "tmr", "tr"}
 
 	date := cmdArgs[0]
 
@@ -324,7 +323,7 @@ func parseTime(cmdArgs []string) (*goment.Goment, error) {
 
 	var second int64
 	if len(timeParts) > 2 {
-		second, err = strconv.ParseInt(timeParts[0], 10, 32)
+		second, err = strconv.ParseInt(timeParts[2], 10, 32)
 		if err != nil {
 			return nil, errors.New("cannot parse second")
 		}
@@ -333,9 +332,6 @@ func parseTime(cmdArgs []string) (*goment.Goment, error) {
 		}
 	}
 	g.SetSecond(int(second))
-
-	// Anything beyond second would be unnecessary precise.
-	g.SetMillisecond(0).SetNanosecond(0)
 
 	return g, nil
 }

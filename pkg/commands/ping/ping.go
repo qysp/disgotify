@@ -41,10 +41,9 @@ func (*Ping) Execute(s common.MessageState) {
 func (c *Ping) Help(s common.MessageState) {
 	cmd := common.CommandPrefix + c.Name()
 	// Unnecessary but I'll leave it as a template for upcomming commands.
-	embed := &disgord.Embed{
+	s.SendEmbed(&disgord.Embed{
 		Title:       fmt.Sprintf("Command \"%s\" usage", c.Name()),
 		Description: fmt.Sprintf("%s", cmd),
 		Color:       0xe5004c,
-	}
-	s.SendEmbed(embed)
+	})
 }

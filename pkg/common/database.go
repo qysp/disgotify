@@ -1,6 +1,8 @@
 package common
 
 import (
+	"time"
+
 	"github.com/jinzhu/gorm"
 	"github.com/qysp/disgotify/pkg/models"
 
@@ -22,6 +24,31 @@ func Init() error {
 	db.AutoMigrate(&models.Reminder{})
 
 	DB = db
+
+	cleanReminders()
+
+	return nil
+}
+
+// cleanReminders deletes outdated reminders in case the bot was down for a period of time.
+// TODO: Add an exception for repeating reminders.
+func cleanReminders() error {
+	var reminders []models.Reminder
+	err := DB.Find(&reminders).Error
+	if err != nil {
+		return err
+	}
+
+	for _, reminder := range reminders {
+		if reminder.Due >= time.Now().Unix() {
+			continue
+		}
+
+		err := DB.Unscoped().Delete(&reminder).Error
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
