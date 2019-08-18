@@ -199,6 +199,30 @@
 			"revisionTime": "2019-03-04T09:57:49Z"
 		},
 		{
+			"checksumSHA1": "dQiBjo008hGWSAL1Jw+6LBjAXSk=",
+			"path": "github.com/stretchr/testify/require",
+			"revision": "221dbe5ed46703ee255b1da0dec05086f5035f62",
+			"revisionTime": "2019-05-17T17:51:56Z"
+		},
+		{
+			"checksumSHA1": "PBv5RH4hgTpXB9Yy7G5dznMKXfQ=",
+			"path": "go.uber.org/zap",
+			"revision": "9a9fa7d4b5f07a9b634983678a65b5525f81e58b",
+			"revisionTime": "2019-07-09T14:27:28Z"
+		},
+		{
+			"checksumSHA1": "zXomv4i4Q94teiXvnLQHfHEIi1g=",
+			"path": "go.uber.org/zap/internal/ztest",
+			"revision": "9a9fa7d4b5f07a9b634983678a65b5525f81e58b",
+			"revisionTime": "2019-07-09T14:27:28Z"
+		},
+		{
+			"checksumSHA1": "OInK5IaTOqWSVFvf4i88wxCR5jQ=",
+			"path": "go.uber.org/zap/zaptest/observer",
+			"revision": "9a9fa7d4b5f07a9b634983678a65b5525f81e58b",
+			"revisionTime": "2019-07-09T14:27:28Z"
+		},
+		{
 			"checksumSHA1": "FExjE7qQVDT7OrjD5GgkbINL7Ok=",
 			"path": "golang.org/x/crypto/md4",
 			"revision": "57b3e21c3d5606066a87e63cfe07ec6b9f0db000",

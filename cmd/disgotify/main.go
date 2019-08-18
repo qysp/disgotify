@@ -11,8 +11,11 @@ func main() {
 	// Load env variables.
 	common.LoadEnv()
 
+	// Initialize the global logger.
+	common.InitLogger(common.Debug)
+
 	// Open connection to database and migrate.
-	common.Init()
+	common.InitDB()
 
 	// Start the Discord bot.
 	core.Start()

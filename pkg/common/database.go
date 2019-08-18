@@ -7,19 +7,19 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/qysp/disgotify/pkg/models"
 
-	// To create a SQLite3 database with GORM
+	// To create a SQLite3 database with GORM.
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 )
 
-// DB represents the disgotify database
+// DB represents the disgotify database.
 var DB *gorm.DB
 
 // Init opens a connection to the database and auto migrates the models.
 // Panics if there was an error initializing the database connection.
-func Init() error {
+func InitDB() {
 	db, err := gorm.Open("sqlite3", path.Join(DatabaseDir, "disgotify.db"))
 	if err != nil {
-		panic(err)
+		Logger.Fatal(err)
 	}
 
 	db.AutoMigrate(&models.Reminder{})
@@ -28,10 +28,8 @@ func Init() error {
 
 	err = cleanReminders()
 	if err != nil {
-		panic(err)
+		Logger.Fatal(err)
 	}
-
-	return nil
 }
 
 // cleanReminders deletes outdated reminders in case the bot was down for a period of time.

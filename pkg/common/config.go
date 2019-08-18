@@ -1,6 +1,7 @@
 package common
 
 import (
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -15,12 +16,13 @@ var (
 	DeveloperID      disgord.Snowflake
 	CommandPrefix    string
 	ReminderInterval time.Duration
+	Debug						 bool
 )
 
 // LoadEnv loads the environment file and panics if it does not exist.
 func LoadEnv() {
 	if _, err := os.Stat(".env"); os.IsNotExist(err) {
-		panic(".env file is missing")
+		log.Fatal(".env file is missing")
 	}
 
 	// Directory where the database will be saved.
@@ -45,4 +47,10 @@ func LoadEnv() {
 		interval = 10000
 	}
 	ReminderInterval = time.Duration(interval) * time.Millisecond
+
+	debug, err := strconv.ParseBool(os.Getenv("DEBUG"))
+	if err != nil {
+		debug = false
+	}
+	Debug = debug
 }

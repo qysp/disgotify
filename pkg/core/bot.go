@@ -19,12 +19,12 @@ var (
 func Start() {
 	Client = disgord.New(&disgord.Config{
 		BotToken: common.DiscordToken,
-		Logger:   disgord.DefaultLogger(false),
+		Logger:   common.DisGordLogger,
 	})
 
 	err := Client.Connect()
 	if err != nil {
-		panic(err)
+		common.Logger.Fatal(err)
 	}
 
 	// Initialize the command index.
