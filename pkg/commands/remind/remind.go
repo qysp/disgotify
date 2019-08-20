@@ -239,17 +239,12 @@ func parseDate(cmdArgs []string, hasNext bool, hasRepeat bool) (*goment.Goment, 
 
 	if weekday, ok := weekdays[date]; ok {
 		currentWeekday := g.ISOWeekday()
+		diff := (weekday - currentWeekday)
 		if weekday < currentWeekday || hasNext {
-			// Mo  Tu  We  Th  Fr  Sa Su
-			// 1   2   3   4   5   6	7
-			// 4 -> 3: (3 - 4) + 7 = 6
-			// 6 -> 7: (7 - 6) + 7 = 8
-			diff := (weekday - currentWeekday) + 7
-			g.Add(diff, "days")
-		} else {
-			g.SetDay(weekday)
+			// Add one week.
+			diff += 7
 		}
-		return g, nil
+		return g.Add(diff, "days"), nil
 	}
 
 	var dateParts []string
